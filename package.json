@@ -1,0 +1,53 @@
+import React, { useState, useEffect } from 'react';
+import { supabase } from './lib/supabase';
+import LoginScreen from './components/LoginScreen';
+import HomeScreen from './components/HomeScreen';
+import RegisterScreen from './components/RegisterScreen';
+import BeforeNRSScreen from './components/BeforeNRSScreen';
+import AfterNRSScreen from './components/AfterNRSScreen';
+import CompleteScreen from './components/CompleteScreen';
+import HistoryScreen from './components/HistoryScreen';
+
+export default function App() {
+  const [screen, setScreen] = useState('login');
+  const [patient, setPatient] = useState(null);
+  const [currentRecord, setCurrentRecord] = useState({});
+
+  useEffect(() => {
+    const saved = localStorage.getItem('eit_patient');
+    if (saved) {
+      setPatient(JSON.parse(saved));
+      setScreen('home');
+    }
+  }, []);
+
+  const savePatient = (p) => {
+    localStorage.setItem('eit_patient', JSON.stringify(p));
+    setPatient(p);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('eit_patient');
+    setPatient(null);
+    setCurrentRecord({});
+    setScreen('login');
+  };
+
+  const nav = (s) => setScreen(s);
+
+  const screens = {
+    login: <LoginScreen onLogin={(p) => { savePatient(p); nav('home'); }} />,
+    register: <RegisterScreen onComplete={(p) => { savePatient(p); nav('home'); }} onBack={() => nav('login')} />,
+    home: <HomeScreen patient={patient} onStartRecord={() => nav('before_nrs')} onHistory={() => nav('history')} onLogout={logout} />,
+    before_nrs: <BeforeNRSScreen patient={patient} onNext={(data) => { setCurrentRecord(data); nav('after_nrs'); }} onBack={() => nav('home')} />,
+    after_nrs: <AfterNRSScreen patient={patient} beforeData={currentRecord} onNext={(data) => { setCurrentRecord({ ...currentRecord, ...data }); nav('complete'); }} onBack={() => nav('before_nrs')} />,
+    complete: <CompleteScreen patient={patient} recordData={currentRecord} onDone={() => { setCurrentRecord({}); nav('home'); }} />,
+    history: <HistoryScreen patient={patient} onBack={() => nav('home')} />,
+  };
+
+  return (
+    <div style={{ maxWidth: 430, margin: '0 auto', minHeight: '100vh', background: '#fff', position: 'relative', overflowX: 'hidden' }}>
+      {screens[screen] || screens.login}
+    </div>
+  );
+}

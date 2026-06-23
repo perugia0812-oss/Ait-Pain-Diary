@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#1D9E75" />
+    <meta name="description" content="エイト 痛みの日誌アプリ" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="エイト日誌" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>エイト 痛みの日誌</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+        background: #F7F9FC;
+        color: #1E293B;
+        -webkit-font-smoothing: antialiased;
+      }
+      #root { min-height: 100vh; }
+    </style>
+  </head>
+  <body>
+    <noscript>このアプリにはJavaScriptが必要です。</noscript>
+    <div id="root"></div>
+  </body>
+</html>
